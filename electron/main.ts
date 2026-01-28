@@ -24,6 +24,9 @@ function createWindow() {
     mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
     mainWindow.webContents.openDevTools()
   } else {
+    // Load index.html from dist folder
+    // Works for both development and production (asar)
+    // __dirname is dist-electron/, so ../dist/index.html is correct
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 

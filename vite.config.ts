@@ -9,6 +9,8 @@ import path from 'path'
 const isElectron = process.env.ELECTRON === 'true'
 
 export default defineConfig({
+  // Use relative paths for Electron (file:// protocol doesn't support absolute paths)
+  base: isElectron ? './' : '/',
   plugins: [
     react(),
     nodePolyfills({
