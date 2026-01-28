@@ -13,14 +13,19 @@ export default defineConfig({
   base: isElectron ? './' : '/',
   plugins: [
     react(),
-    nodePolyfills({
-      include: ['buffer', 'events', 'stream', 'util', 'process'],
-      globals: {
-        Buffer: true,
-        global: true,
-        process: true,
-      },
-    }),
+    // Node polyfills only for non-Electron builds (web/PWA/Capacitor)
+    ...(!isElectron
+      ? [
+          nodePolyfills({
+            include: ['buffer', 'events', 'stream', 'util', 'process'],
+            globals: {
+              Buffer: true,
+              global: true,
+              process: true,
+            },
+          }),
+        ]
+      : []),
     // Only include electron plugins when building for electron
     ...(isElectron
       ? [
@@ -35,7 +40,10 @@ export default defineConfig({
               },
             },
           ]),
-          renderer(),
+          renderer({
+            // Use node built-ins in the renderer
+            nodeIntegration: true,
+          }),
         ]
       : []),
     // PWA plugin for web/mobile

@@ -14,8 +14,8 @@ function createWindow() {
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
+      contextIsolation: false,
+      nodeIntegration: true,
     },
     icon: path.join(__dirname, '../build-resources/icon.png'),
   })
@@ -25,8 +25,6 @@ function createWindow() {
     mainWindow.webContents.openDevTools()
   } else {
     // Load index.html from dist folder
-    // Works for both development and production (asar)
-    // __dirname is dist-electron/, so ../dist/index.html is correct
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
