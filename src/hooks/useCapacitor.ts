@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Capacitor } from '@capacitor/core'
-import { App, type PluginListenerHandle } from '@capacitor/app'
+import { Capacitor, type PluginListenerHandle } from '@capacitor/core'
+import { App } from '@capacitor/app'
 import { StatusBar, Style } from '@capacitor/status-bar'
 
 export const useCapacitor = () => {
