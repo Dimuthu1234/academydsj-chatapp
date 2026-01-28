@@ -20,11 +20,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer || sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
       - name: Install dependencies
         run: npm ci
@@ -65,39 +65,6 @@ jobs:
           name: AcademyDSJ-Chat-iOS-Simulator
           path: ios/App/build/Simulator/AcademyDSJ-Chat-Simulator.zip
           retention-days: 30
-
-      # Unsigned IPA for ad-hoc distribution (requires signing for device install)
-      - name: Build iOS App (Device - Unsigned)
-        run: |
-          cd ios/App
-          xcodebuild -project App.xcodeproj \
-            -scheme App \
-            -configuration Release \
-            -destination 'generic/platform=iOS' \
-            -archivePath build/App-Device.xcarchive \
-            archive \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO || echo "Device build may fail without signing"
-
-      - name: Create Unsigned IPA
-        run: |
-          cd ios/App/build
-          mkdir -p Payload
-          if [ -d "App-Device.xcarchive/Products/Applications/App.app" ]; then
-            cp -R App-Device.xcarchive/Products/Applications/App.app Payload/
-            zip -r AcademyDSJ-Chat-unsigned.ipa Payload
-          else
-            echo "Device build not available - signing required for device builds"
-          fi
-
-      - name: Upload Unsigned IPA
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: AcademyDSJ-Chat-iOS-Unsigned
-          path: ios/App/build/AcademyDSJ-Chat-unsigned.ipa
-          retention-days: 30
           if-no-files-found: ignore
 
       - name: Upload Release Artifacts
@@ -105,8 +72,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-release-${{ github.ref_name }}
-          path: |
-            ios/App/build/Simulator/AcademyDSJ-Chat-Simulator.zip
-            ios/App/build/AcademyDSJ-Chat-unsigned.ipa
+          path: ios/App/build/Simulator/AcademyDSJ-Chat-Simulator.zip
           retention-days: 90
           if-no-files-found: ignore
