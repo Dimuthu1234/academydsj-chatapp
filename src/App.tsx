@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from '@/components/Layout'
 import { Login } from '@/pages/Login'
@@ -8,6 +8,7 @@ import { Calls } from '@/pages/Calls'
 import { Groups } from '@/pages/Groups'
 import { Settings } from '@/pages/Settings'
 import { useAuthStore } from '@/stores/authStore'
+import { useCapacitor, initializeCapacitor } from '@/hooks/useCapacitor'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuthStore()
@@ -30,6 +31,13 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 }
 
 const App: React.FC = () => {
+  // Initialize Capacitor features
+  useCapacitor()
+
+  useEffect(() => {
+    initializeCapacitor()
+  }, [])
+
   return (
     <Routes>
       <Route

@@ -13,10 +13,12 @@ const config: CapacitorConfig = {
       launchShowDuration: 2000,
       backgroundColor: '#0a0a12',
       showSpinner: false,
+      launchAutoHide: true,
     },
     StatusBar: {
       style: 'DARK',
       backgroundColor: '#0a0a12',
+      overlaysWebView: false,
     },
     Keyboard: {
       resize: 'body',
@@ -25,9 +27,11 @@ const config: CapacitorConfig = {
   },
   android: {
     allowMixedContent: true,
+    backgroundColor: '#0a0a12',
   },
   ios: {
     contentInset: 'automatic',
+    backgroundColor: '#0a0a12',
   },
 }
 

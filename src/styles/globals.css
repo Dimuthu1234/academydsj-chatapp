@@ -29,7 +29,15 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure app container allows scrolling */
+#root {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom scrollbar */

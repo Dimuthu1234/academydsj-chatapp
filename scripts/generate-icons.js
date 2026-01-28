@@ -101,6 +101,15 @@ async function generateElectronIcons() {
   console.log('  Note: For macOS .icns, electron-builder will convert icon.png')
 }
 
+// Android adaptive icon foreground sizes (108dp with 18dp safe zone padding)
+const ANDROID_FOREGROUND_SIZES = [
+  { folder: 'mipmap-mdpi', size: 108 },
+  { folder: 'mipmap-hdpi', size: 162 },
+  { folder: 'mipmap-xhdpi', size: 216 },
+  { folder: 'mipmap-xxhdpi', size: 324 },
+  { folder: 'mipmap-xxxhdpi', size: 432 },
+]
+
 async function generateAndroidIcons() {
   console.log('Generating Android icons with rounded corners...')
 
@@ -132,6 +141,40 @@ async function generateAndroidIcons() {
       .toFile(path.join(folderPath, 'ic_launcher_round.png'))
 
     console.log(`  Created Android icons in ${folder}`)
+  }
+
+  // Generate adaptive icon foregrounds (larger with padding)
+  for (const { folder, size } of ANDROID_FOREGROUND_SIZES) {
+    const folderPath = path.join(ANDROID_RES_DIR, folder)
+    await ensureDir(folderPath)
+
+    // Foreground icon - logo centered with padding (72dp logo in 108dp canvas)
+    const logoSize = Math.round(size * 0.67) // 72/108 ratio
+    const padding = Math.round((size - logoSize) / 2)
+
+    // Create a transparent canvas with logo centered
+    const logoBuffer = await sharp(SOURCE_IMAGE)
+      .resize(logoSize, logoSize, { fit: 'cover' })
+      .png()
+      .toBuffer()
+
+    await sharp({
+      create: {
+        width: size,
+        height: size,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 }
+      }
+    })
+      .composite([{
+        input: logoBuffer,
+        top: padding,
+        left: padding
+      }])
+      .png()
+      .toFile(path.join(folderPath, 'ic_launcher_foreground.png'))
+
+    console.log(`  Created Android foreground icon in ${folder}`)
   }
 }
 

@@ -33,8 +33,8 @@ export const Register: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-bg-primary flex items-center justify-center p-4 overflow-y-auto">
+      <div className="w-full max-w-md py-8">
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-accent-primary flex items-center justify-center mx-auto mb-4">
             <span className="text-bg-primary font-bold text-2xl">A</span>
