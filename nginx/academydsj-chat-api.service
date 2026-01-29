@@ -1,0 +1,28 @@
+# Academy DSJ Chat API - Systemd Service
+# Copy this file to /etc/systemd/system/academydsj-chat-api.service
+
+[Unit]
+Description=Academy DSJ Chat API Server
+Documentation=https://github.com/Dimuthu1234/academydsj-chatapp
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/academydsj-chatapp/server
+Environment=NODE_ENV=production
+EnvironmentFile=/var/www/academydsj-chatapp/server/.env
+ExecStart=/usr/bin/npx tsx src/index.ts
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=academydsj-chat-api
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -32,6 +32,9 @@ jobs:
 
       - name: Build web
         run: npm run build
+        env:
+          VITE_API_URL: https://chat-api.academydsj.com/api
+          VITE_SOCKET_URL: https://chat-api.academydsj.com
 
       - name: Upload Web Build
         uses: actions/upload-artifact@v4
@@ -62,6 +65,8 @@ jobs:
         run: npm run build
         env:
           ELECTRON: true
+          VITE_API_URL: https://chat-api.academydsj.com/api
+          VITE_SOCKET_URL: https://chat-api.academydsj.com
 
       - name: Build Electron for macOS
         run: npx electron-builder --mac --publish never
@@ -99,6 +104,8 @@ jobs:
         run: npm run build
         env:
           ELECTRON: true
+          VITE_API_URL: https://chat-api.academydsj.com/api
+          VITE_SOCKET_URL: https://chat-api.academydsj.com
 
       - name: Build Electron for Windows
         run: npx electron-builder --win --publish never
@@ -135,6 +142,8 @@ jobs:
         run: npm run build
         env:
           ELECTRON: true
+          VITE_API_URL: https://chat-api.academydsj.com/api
+          VITE_SOCKET_URL: https://chat-api.academydsj.com
 
       - name: Build Electron for Linux
         run: npx electron-builder --linux --publish never
@@ -179,6 +188,9 @@ jobs:
 
       - name: Build web assets
         run: npm run build
+        env:
+          VITE_API_URL: https://chat-api.academydsj.com/api
+          VITE_SOCKET_URL: https://chat-api.academydsj.com
 
       - name: Sync Capacitor
         run: npx cap sync android
@@ -226,6 +238,9 @@ jobs:
 
       - name: Build web assets
         run: npm run build
+        env:
+          VITE_API_URL: https://chat-api.academydsj.com/api
+          VITE_SOCKET_URL: https://chat-api.academydsj.com
 
       - name: Sync Capacitor
         run: npx cap sync ios

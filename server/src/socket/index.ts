@@ -13,14 +13,35 @@ interface AuthenticatedSocket extends Socket {
 const connectedUsers = new Map<string, string>()
 
 export function setupSocketIO(httpServer: HTTPServer) {
+  // Socket.IO CORS - supports web, desktop (Electron), and mobile (Capacitor) apps
+  const corsOrigins = process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) || ['http://localhost:5173']
+
   const io = new Server(httpServer, {
     cors: {
-      origin: ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', 'file://'],
+      origin: (origin, callback) => {
+        // Allow requests with no origin (mobile apps, desktop apps)
+        if (!origin) return callback(null, true)
+        // Allow configured origins
+        if (corsOrigins.some(allowed => origin === allowed)) {
+          return callback(null, true)
+        }
+        // Allow file:// and capacitor:// for desktop/mobile apps
+        if (origin.startsWith('file://') || origin.startsWith('capacitor://')) {
+          return callback(null, true)
+        }
+        // Allow localhost for development
+        if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+          return callback(null, true)
+        }
+        callback(new Error('Not allowed by CORS'))
+      },
       methods: ['GET', 'POST'],
       credentials: true,
     },
     transports: ['polling', 'websocket'],
     allowEIO3: true,
+    pingTimeout: 60000,
+    pingInterval: 25000,
   })
 
   io.use(async (socket: AuthenticatedSocket, next) => {

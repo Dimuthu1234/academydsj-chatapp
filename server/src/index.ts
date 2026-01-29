@@ -22,8 +22,22 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const httpServer = createServer(app)
 
+// CORS configuration - supports multiple origins for web, desktop, and mobile apps
+const corsOrigins = process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) || ['http://localhost:5173']
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, desktop apps, curl, etc.)
+    if (!origin) return callback(null, true)
+    // Allow configured origins
+    if (corsOrigins.some(allowed => origin === allowed || origin.startsWith('file://') || origin.startsWith('capacitor://'))) {
+      return callback(null, true)
+    }
+    // Allow localhost for development
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true)
+    }
+    callback(new Error('Not allowed by CORS'))
+  },
   credentials: true,
 }))
 

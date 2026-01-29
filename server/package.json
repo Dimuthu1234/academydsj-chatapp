@@ -1,6 +1,6 @@
 {
   "name": "academydsj-chat-server",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Backend server for AcademyDSJ Chat",
   "type": "module",
   "main": "src/index.ts",
